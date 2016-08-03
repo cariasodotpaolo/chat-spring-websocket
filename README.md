@@ -18,3 +18,4 @@ LIMITATIONS AND UNFINISHED FEATURES:
 2. Push notification for incoming private messages
 3. Polishing of browser address bar URL value
 4. Polishing of events behavior and CSS styles
+5. Use of OAuth access token for websocket endpoint connection is poorly implemented. the token can not be verified with the token store since the token store is within spring context and the websocket endpoint is not. There are work arounds but needs more time for implementation. Spring MVC 4.2 has its own websocket implementation and would be the right configuration to use in conjunction with Spring MVC.
