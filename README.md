@@ -1,0 +1,20 @@
+NOTES:
+
+1. Context Root: /gochat
+2. Container used: apache-tomcat-8.0.28
+
+3. Preloaded Users for testing:
+   username/password: john_smith/john_smith
+   username/password: linda_mcbride/linda_mcbride
+
+4. The Mock users have been initialized having database relational behavior such as friends list (Please see com.gochat.dao.UserDB.java)
+
+5. Spring MVC with Spring Security + OAuth2 implementation
+
+6. Native JEE 7 WebSocket implementation
+
+LIMITATIONS AND UNFINISHED FEATURES:
+1. Private messaging with a friend on the list (Supposed to be implemented using Spring MVC Server-Sent Event implementation SseEmitter)
+2. Push notification for incoming private messages
+3. Polishing of browser address bar URL value
+4. Polishing of events behavior and CSS styles
