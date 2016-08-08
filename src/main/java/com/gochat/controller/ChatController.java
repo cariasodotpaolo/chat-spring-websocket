@@ -11,12 +11,15 @@ import javax.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,7 +30,6 @@ import com.gochat.service.ChannelService;
 import com.gochat.service.OnlineService;
 import com.gochat.service.TokenVerificationService;
 import com.gochat.service.UserService;
-import com.gochat.websocket.ChatChannelEndpoint;
 
 /**
  * @author mpcariaso
@@ -46,7 +48,10 @@ public class ChatController {
 	private OnlineService onlineService;
 	
 	@Resource
-	private ChannelService channelService;	
+	private ChannelService channelService;
+	
+	@Resource
+	private TokenVerificationService tokenVerificationService;
 			
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
     public ModelAndView getHomePage(HttpServletRequest request, 
@@ -100,6 +105,41 @@ public class ChatController {
 		
 	}
 	
+	/*
+	 * Secure API for establishing connection to websocket endpoint
+	 * @ResponseBody prevents resolving string value to JSP/View name
+	 */
+	@RequestMapping(value="/server/channel/{channel}", 
+					method= RequestMethod.GET, produces="text/plain")
+	@ResponseBody
+	public String connectToChatServer(HttpServletRequest request,
+									  @PathVariable String channel,
+									  @RequestHeader("Authorization") String authHeader) {		
+		
+		//NOTE: Bearer has capital B - OAuth specification
+		String headerToken = authHeader.split("Bearer")[1].trim();
+				
+		HttpSession session = request.getSession(false);		
+		String accessToken = (String) session.getAttribute("accessToken");
+		
+		logger.debug("session token: " + accessToken);
+		logger.debug("header token: " + headerToken);
+		
+		if(!accessToken.equals(headerToken)) {
+			tokenVerificationService.revokeToken(accessToken);
+			onlineService.setOffline((String)session.getAttribute("userName"));
+			session.invalidate();
+			throw new UnauthorizedClientException("Invalid token");
+		}
+		
+		String websocketUrl = "ws://" + request.getServerName() + ":" + request.getServerPort() + 
+							  request.getContextPath() + "/endpoint/channel/" + channel + "/" + headerToken;
+		
+		logger.debug("Opening websocket session from: " + websocketUrl);
+		
+		return websocketUrl;
+	}
+	
 	@RequestMapping("/logout")
     public String logout(HttpServletRequest request) {
         
@@ -110,6 +150,9 @@ public class ChatController {
     	onlineService.setOffline(userName);
     	
         HttpSession session = request.getSession(false);
+        String accessToken = (String) session.getAttribute("accessToken");
+        
+        tokenVerificationService.revokeToken(accessToken);
         
         session.invalidate();
        
@@ -124,12 +167,34 @@ public class ChatController {
 	}*/
 	
 	@ExceptionHandler(InvalidAcceptHeaderException.class)
-	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "Not Acceptable")
-	public void handleInvalidAcceptHeaderException(
-			InvalidAcceptHeaderException e) {
+	//@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE, reason = "Not Acceptable")
+	public ModelAndView handleInvalidAcceptHeaderException(HttpServletResponse response,
+														   InvalidAcceptHeaderException e) {
 
 		// TODO: do some logging here
-		// logger.error(e.getMessage());
+		logger.error(e.getMessage(), e);
+		response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+		ModelAndView model = new ModelAndView("error-page");
+		model.getModelMap().addAttribute("errorMessage", e.getMessage());
+		
+		return model;
+	}
+	
+	@ExceptionHandler(UnauthorizedClientException.class)
+	//@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Unauthorized")
+	public ModelAndView handleUnauthorizedException(HttpServletResponse response, 
+												    UnauthorizedClientException e) {
+		
+		// TODO: do some logging here
+		logger.error(e.getMessage(), e);
+		
+		//set error status code so JQuery AJAX can pick up the response as error
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		ModelAndView model = new ModelAndView("error-page");
+		model.getModelMap().addAttribute("errorMessage", e.getMessage());
+		
+		return model;
+		
 	}
 
 }

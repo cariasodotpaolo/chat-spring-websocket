@@ -107,11 +107,7 @@
 		<property name="accessTokenValiditySeconds" value="1800" />
 		<property name="clientDetailsService" ref="clientDetails" />
 	</bean>
-	
-	<!-- <bean name="tokenVerificationService" class="com.gochat.service.TokenVerificationServiceImpl">
-		<property name="tokenServices" ref="tokenServices"/>
-	</bean> -->
-	
+		
 	<sec:authentication-manager id="userAuthenticationManager">
 		<sec:authentication-provider  ref="userAuthenticationProvider">
 		</sec:authentication-provider>

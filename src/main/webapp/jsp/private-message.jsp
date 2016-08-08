@@ -8,7 +8,7 @@
 	<link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/gochat.css" rel="stylesheet">
-    <script type="text/javascript" src="js/chat-channel.js"></script>
+    <script type="text/javascript" src="js/private-msg.js"></script>
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
     
     <script type="text/javascript">    
@@ -31,7 +31,7 @@
 				//Prevent submitting the inherited URL/address
 				event.preventDefault();
 				
-				var msg = '{"message":"' + $message.val() + '", "sender":"${chatUserFullName}", "recipient":"${recipient}", "timestamp":""}';
+				var msg = '{"message":"' + $message.val() + '", "sender":"${chatUserFullName}", "recipient":"${recipient}", "token":"${accessToken}", "timestamp":""}';
 				
 				sendMessage(msg);
 			});
@@ -39,7 +39,7 @@
 			$('#send-message').click(function(event) {
 				event.preventDefault();
 				
-				var msg = '{"message":"' + $message.val() + '", "sender":"${chatUserFullName}", "recipient":"${recipient}", "timestamp":""}';					
+				var msg = '{"message":"' + $message.val() + '", "sender":"${chatUserFullName}", "recipient":"${recipient}", "token":"${accessToken}", "timestamp":""}';					
 				
 				sendMessage(msg);
 			});

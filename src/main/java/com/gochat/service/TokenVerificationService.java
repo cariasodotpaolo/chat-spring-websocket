@@ -8,4 +8,6 @@ public interface TokenVerificationService {
 
 	boolean isAuthorized(String token);
 
+	void revokeToken(String accessToken);
+
 }

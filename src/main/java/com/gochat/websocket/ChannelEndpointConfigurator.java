@@ -1,12 +1,6 @@
 package com.gochat.websocket;
 
-import javax.annotation.Resource;
 import javax.websocket.server.ServerEndpointConfig;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.gochat.service.TokenVerificationService;
 
 /**
  * @author mpcariaso
@@ -19,13 +13,13 @@ import com.gochat.service.TokenVerificationService;
 //@Scope("singleton")
 public class ChannelEndpointConfigurator extends ServerEndpointConfig.Configurator {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ChannelEndpointConfigurator.class);
+	//private static final Logger logger = LoggerFactory.getLogger(ChannelEndpointConfigurator.class);
 	
 	//@Resource
 	private ChatChannelEndpoint channelEndpoint;
 		
-	@Resource
-	private TokenVerificationService tokenVerificationService;
+	//@Resource
+	//private TokenVerificationService tokenVerificationService;
 		
 	/*@PostConstruct
 	public void init() {

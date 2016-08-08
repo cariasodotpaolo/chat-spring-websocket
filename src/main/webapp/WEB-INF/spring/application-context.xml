@@ -9,6 +9,6 @@
 	
 	<context:annotation-config/>
 	
-	<context:property-placeholder location="classpath:spring.properties"/> 	
+	<context:property-placeholder location="classpath:spring.properties"/>
 	
 </beans>

@@ -1,5 +1,5 @@
 	var wsocket;
-	var serviceLocation = "ws://" + document.location.host + "/gochat/channel/";
+	//var serviceLocation = "ws://" + document.location.host + "/gochat/channel/";
 	
 
 	function onMessageReceived(event) {
@@ -18,8 +18,33 @@
 		$message.val('').focus();		
 	}
 
-	function connectToServer(channel,token) {		
+	/*function connectToServer(channel,token) {		
 		wsocket = new WebSocket(serviceLocation + channel + "/" + token);
+		wsocket.onmessage = onMessageReceived;
+	}*/
+	
+	function connectToSecureServer(channel,token) {		
+				
+		$.ajax
+		({
+		  type: "GET",
+		  url: "http://" + document.location.host + "/gochat/chat/server/channel/" + channel,
+		  dataType: 'text',
+		  async: false,
+		  headers: {
+		    "Authorization": "Bearer " + token
+		  },
+		  data: '',
+		  success: function (data){
+			 			  
+			  wsocket = new WebSocket(data);
+		  },
+		  error: function (request,status,error) {
+			  	
+			  document.write(request.responseText);
+		  }
+		});		
+		
 		wsocket.onmessage = onMessageReceived;
 	}
 

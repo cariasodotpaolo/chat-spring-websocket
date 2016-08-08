@@ -9,7 +9,7 @@
   <url>http://maven.apache.org</url>
   
   <build>
-    <finalName>gochat</finalName>
+    <finalName>gochat-web</finalName>
     <plugins>
         <plugin>
             <artifactId>maven-war-plugin</artifactId>

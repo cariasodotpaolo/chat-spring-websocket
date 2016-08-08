@@ -28,7 +28,7 @@ import com.gochat.service.TokenVerificationService;
  * @author mpcariaso
  *
  */
-@ServerEndpoint(value = "/channel/{channel}/{token}", 
+@ServerEndpoint(value = "/endpoint/channel/{channel}/{token}", 
 				encoders = MessageEncoder.class, 
 				decoders = MessageDecoder.class,
 				configurator = ChannelEndpointConfigurator.class)
@@ -78,11 +78,18 @@ public class ChatChannelEndpoint {
 		String channel = (String) session.getUserProperties().get("channel");
 		String token = (String) session.getUserProperties().get("token");
 		
+		
 		logger.debug("Message from " + message.getSender() + ": " + message.getMessage() + " to Channel: " + channel);
 		
 		//message.setMessage(message.getMessage() + "(From Server)");
 		
 		try {
+			
+			if (token == null ) {
+				throw new Exception("Unauthorized session.");
+			} else if(!token.equals(message.getToken())) {
+				throw new Exception("Invalid session.");
+			} 
 			
 			if (message.getToken() == null || message.getToken().isEmpty()) throw new Exception("Missing Token.");
 			else if (!message.getToken().equals(token)) throw new Exception("Invalid Token.");
@@ -90,7 +97,6 @@ public class ChatChannelEndpoint {
 			for (Session openSession : channelSessions) {
 				
 				String openSessionChannel = (String) openSession.getUserProperties().get("channel");
-				String openSessionToken = (String) openSession.getUserProperties().get("token");
 				
 				if (openSession.isOpen() && channel.equals(openSessionChannel) ) {
 					

@@ -27,7 +27,7 @@
 			$chatWindow = $('#response');
 			$mainChatWindow = $('#main-chat-wrapper');
 			
-			connectToServer(channel,token);			
+			connectToSecureServer(channel,token);
 			
 			$message.focus();
 						

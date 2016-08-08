@@ -30,4 +30,10 @@ public class TokenVerificationServiceImpl implements TokenVerificationService {
 			return true;
 		} else return false;
 	}
+	
+	@Override
+	public void revokeToken(String accessToken) {
+		
+		tokenServices.revokeToken(accessToken);
+	}
 }
