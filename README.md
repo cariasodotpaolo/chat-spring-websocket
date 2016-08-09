@@ -1,5 +1,5 @@
 
-**This branch is for development continuation of the code submitted during the deadline (master branch)**
+**This branch is for development continuation of the code submitted during the deadline - August 3, 2016 (master branch)**
 
 Change Log:
 
