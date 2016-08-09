@@ -3,7 +3,7 @@
 
 Change Log:
 
-1. Javascript/JQuery websocket client function to connect to server no longer directly accesses the websocket server (i.e. websocket server URL is no longer explicitly declared in javascript file). the connect function now sends an AJAX request with Authorization header to a Spring MVC controller API method. This ensures that the request goes through Spring OAuth security filter. The controller method then returns the URL String as response body and the JQuery AJAX client receives the URL string as callback data. 
+1. Javascript/JQuery websocket client function to connect to server no longer directly accesses the websocket server (i.e. websocket server URL is no longer explicitly declared in javascript file). the connect function now sends an AJAX request with Authorization header to a Spring MVC controller API method. This ensures that the request goes through Spring OAuth security filter. The controller method then returns the URL String as response body and the JQuery AJAX client receives the URL string as callback data. JQuery AJAX call then instantiates the websocket object in its success handling sub-function. 
 
 2. Modified exception handling on the chat controller. Added specific error page.
 
