@@ -1,3 +1,6 @@
+
+**This branch is for development continuation of the code submitted during the deadline (master branch)**
+
 NOTES:
 
 1. Context Root: /gochat
