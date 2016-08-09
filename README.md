@@ -1,5 +1,5 @@
 
-**This is the submitted code for the exam**
+**This is the submitted code for the exam.**
 
 NOTES:
 
