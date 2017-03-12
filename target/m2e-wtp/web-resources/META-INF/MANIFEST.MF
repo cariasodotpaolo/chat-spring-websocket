@@ -17,6 +17,6 @@ Class-Path: hamcrest-core-1.3.jar logback-core-1.1.3.jar logback-class
  .5.1.jar httpcore-4.4.3.jar httpmime-4.5.1.jar hamcrest-library-1.3.j
  ar tagsoup-1.2.1.jar json-path-2.8.0.jar groovy-json-2.4.4.jar rest-a
  ssured-common-2.8.0.jar xml-path-2.8.0.jar commons-lang3-3.3.2.jar
-Build-Jdk: 1.8.0_71
+Build-Jdk: 1.8.0_45
 Created-By: Maven Integration for Eclipse
 
